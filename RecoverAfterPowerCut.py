@@ -3,6 +3,8 @@ import numpy as np
 
 def make_correction():
     df = pd.read_csv('dump.txt')
+    print(df.head())
+
     df.columns = ['ms', 'H', 'A']
 
     df['dif'] = df['ms'].diff()

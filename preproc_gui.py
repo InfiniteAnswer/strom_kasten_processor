@@ -108,15 +108,21 @@ def analyse(data_obj):
 
 
     df['heat thresh'] = np.where(df['H'] < HEAT_TRIGGER, 1, 0)
+    df = df.drop(columns=['H'])
     df['heat diff'] = df['heat thresh'].diff()
+    df = df.drop(columns=['heat thresh'])
     df['heat positive edges'] = np.where(df['heat diff'] > 0, 1, 0)
+    df = df.drop(columns=['heat diff'])
 
     df['appl thresh'] = np.where(df['A'] > APPLIANCE_TRIGGER, 1, 0)
+    df = df.drop(columns=['A'])
     df['appl diff'] = df['appl thresh'].diff()
+    df = df.drop(columns=['appl thresh'])
     df['appl positive edges'] = np.where(df['appl diff'] > 0, 1, 0)
+    df = df.drop(columns=['appl diff'])
 
     # REMOVE UNNECESSARY COLUMNS AND ROWS
-    df = df.drop(columns=['H', 'A', 'heat thresh', 'heat diff', 'appl thresh', 'appl diff'])
+    #df = df.drop(columns=['H', 'A', 'heat thresh', 'heat diff', 'appl thresh', 'appl diff'])
 
     df['seconds'] = df['ms'] / 1000
     df['Hours'] = df['seconds'] / 3600

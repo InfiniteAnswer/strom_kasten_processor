@@ -1,5 +1,5 @@
 # RUN THIS GUI FOR PROCESSING FILES
-# If there was a power cut, run the file "RecoverAfterPowerCut"
+# Automatically checks and corrects for power cuts using "RecoverAfterPowerCut"
 # Select the file to load by commenting one of the lines in preproc_gui.py... e.g.  READ_FILENAME = "corrected.csv"
 
 
@@ -44,6 +44,9 @@ def update_global_data(*args):
         run_pre_proc()
     except:
         print("Invalid field data")
+        print("Attempting run from loaded JSON info")
+        run_pre_proc()
+        
 
 def echo_values():
     for field in data.__dict__:
@@ -73,6 +76,19 @@ def file_load_callback():
     data.load_filename = filedialog.askopenfilename(initialdir=START_DIR, title="Select file",
                                                     filetypes=(
                                                         ("Arduino files", "*.txt"), ("all files", "*.*")))
+    print(data.load_filename)
+    with open(data.load_filename) as f:
+        info = json.load(f)
+    print(info)
+    data.HT_end = float(info["end"]["HT"])
+    data.HT_start = float(info["start"]["HT"])
+    data.NT_end = float(info["end"]["NT"])
+    data.NT_start = float(info["start"]["NT"])
+    data.APP_end = float(info["end"]["APP"])
+    data.APP_start = float(info["start"]["APP"])
+    data.start_datetime = info["start"]["date"]
+    data.end_datetime = info["end"]["date"]
+
 
 def file_save_callback():
     global data
